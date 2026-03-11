@@ -1,0 +1,187 @@
+#:kivy 2.3.1
+
+<CandleCard>:
+    orientation: "vertical"
+    size_hint: None, None
+    size: "130dp", "150dp"
+    padding: "8dp"
+    spacing: "4dp"
+    style: "elevated"
+    md_bg_color: [1, 1, 1, 1] 
+    radius: [20, 20, 20, 20]
+    on_release: app.select_candle(self.candle_id)
+
+    MDIcon:
+        icon: root.icon_source
+        font_size: "64sp"
+        pos_hint: {"center_x": .5}
+        theme_text_color: "Custom"
+        text_color: root.icon_color
+        size_hint_y: 0.65
+    
+    MDLabel:
+        text: root.candle_name
+        halign: "center"
+        font_style: "Title"
+        role: "medium"
+        theme_text_color: "Primary"
+        size_hint_y: 0.2
+        
+    MDLabel:
+        text: root.candle_time
+        halign: "center"
+        font_style: "Label"
+        role: "medium"
+        theme_text_color: "Secondary"
+        size_hint_y: 0.15
+
+<ScreenManager>:
+    HearthScreen:
+        name: 'hearth'
+    WaxShopScreen:
+        name: 'shop'
+    GraveyardScreen:
+        name: 'graveyard'
+
+<HearthScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        md_bg_color: [0.98, 0.96, 0.94, 1]
+
+        MDTopAppBar:
+            type: "small"
+            theme_bg_color: "Custom"
+            md_bg_color: [0.98, 0.96, 0.94, 1] # Match the app background
+            MDTopAppBarTitle:
+                text: "The Hearth"
+                theme_text_color: "Custom"
+                text_color: [0.4, 0.2, 0.1, 1] # Warm dark brown
+            MDTopAppBarTrailingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "cart-outline"
+                    theme_icon_color: "Custom"
+                    icon_color: [0.4, 0.2, 0.1, 1]
+                    on_release: root.manager.current = 'shop'
+                MDActionTopAppBarButton:
+                    icon: "history"
+                    theme_icon_color: "Custom"
+                    icon_color: [0.4, 0.2, 0.1, 1]
+                    on_release: root.manager.current = 'graveyard'
+        
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: "10dp"
+            spacing: "5dp"
+            
+            MDScrollView:
+                size_hint_y: None
+                height: "170dp"
+                do_scroll_y: False
+                do_scroll_x: True
+                MDBoxLayout:
+                    id: candle_carousel
+                    orientation: "horizontal"
+                    adaptive_width: True
+                    spacing: "15dp"
+                    padding: ["10dp", "10dp", "10dp", "10dp"]
+
+            MDLabel:
+                id: selected_candle_label
+                text: "Select a candle to begin"
+                font_style: "Title"
+                role: "large"
+                halign: "center"
+                theme_text_color: "Primary"
+                size_hint_y: None
+                height: "30dp"
+
+            MDLabel:
+                id: timer_label
+                text: "00:00"
+                font_style: "Display"
+                role: "large"
+                theme_text_color: "Primary"
+                halign: "center"
+                size_hint_y: None
+                height: "60dp"
+
+            Candle:
+                id: candle_widget
+                size_hint_y: 1
+
+            MDBoxLayout:
+                adaptive_height: True
+                spacing: "20dp"
+                padding: "20dp"
+                pos_hint: {"center_x": 0.5}
+
+                MDButton:
+                    id: start_btn
+                    style: "filled"
+                    on_release: root.start_timer()
+                    MDButtonText:
+                        text: "Light Flame"
+
+                MDButton:
+                    id: pause_btn
+                    style: "tonal"
+                    disabled: True
+                    on_release: root.pause_timer()
+                    MDButtonText:
+                        id: pause_btn_text
+                        text: "Pause"
+
+<WaxShopScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        md_bg_color: [0.98, 0.96, 0.94, 1]
+        MDTopAppBar:
+            type: "small"
+            theme_bg_color: "Custom"
+            md_bg_color: [0.98, 0.96, 0.94, 1]
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "arrow-left"
+                    theme_icon_color: "Custom"
+                    icon_color: [0.4, 0.2, 0.1, 1]
+                    on_release: root.manager.current = 'hearth'
+            MDTopAppBarTitle:
+                text: "The Wax Shop"
+                theme_text_color: "Custom"
+                text_color: [0.4, 0.2, 0.1, 1]
+        
+        MDLabel:
+            id: balance_label
+            text: "Embers: 0"
+            font_style: "Title"
+            role: "medium"
+            halign: "center"
+            size_hint_y: None
+            height: "80dp"
+        
+        MDScrollView:
+            MDList:
+                id: shop_list
+
+<GraveyardScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        md_bg_color: [0.98, 0.96, 0.94, 1]
+        MDTopAppBar:
+            type: "small"
+            theme_bg_color: "Custom"
+            md_bg_color: [0.98, 0.96, 0.94, 1]
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "arrow-left"
+                    theme_icon_color: "Custom"
+                    icon_color: [0.4, 0.2, 0.1, 1]
+                    on_release: root.manager.current = 'hearth'
+            MDTopAppBarTitle:
+                text: "The Graveyard"
+                theme_text_color: "Custom"
+                text_color: [0.4, 0.2, 0.1, 1]
+                
+        MDScrollView:
+            MDList:
+                id: sessions_list

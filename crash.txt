@@ -8,25 +8,23 @@ Traceback (most recent call last):
   File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivy\app.py", line 925, in _run_prepare
     root = self.build()
            ^^^^^^^^^^^^
-  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\main.py", line 378, in build
-    self.theme_cls.primary_palette = "Amber"
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "kivy\\properties.pyx", line 520, in kivy.properties.Property.__set__
-  File "kivy\\properties.pyx", line 567, in kivy.properties.Property.set
-  File "kivy\\properties.pyx", line 606, in kivy.properties.Property._dispatch
-  File "kivy\\_event.pyx", line 1307, in kivy._event.EventObservers.dispatch
-  File "kivy\\_event.pyx", line 1213, in kivy._event.EventObservers._dispatch
-  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivymd\theming.py", line 793, in set_colors
-    self._set_palette_color()
-  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivymd\theming.py", line 889, in _set_palette_color
-    self._set_application_scheme(self.primary_palette)
-  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivymd\theming.py", line 864, in _set_application_scheme
-    color = Hct.from_int(argb_from_rgba_01(self.color_to_rgba(color)))
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\materialyoucolor\utils\color_utils.py", line 151, in argb_from_rgba_01
-    return argb_from_rgba([int(_ * 255) for _ in rgba])
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\materialyoucolor\utils\color_utils.py", line 151, in <listcomp>
-    return argb_from_rgba([int(_ * 255) for _ in rgba])
-                           ^^^^^^^^^^^^
-ValueError: invalid literal for int() with base 10: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\main.py", line 676, in build
+    self.sm = ScreenManager()
+              ^^^^^^^^^^^^^^^
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivy\uix\screenmanager.py", line 973, in __init__
+    super(ScreenManager, self).__init__(**kwargs)
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivy\uix\floatlayout.py", line 65, in __init__
+    super(FloatLayout, self).__init__(**kwargs)
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivy\uix\layout.py", line 76, in __init__
+    super(Layout, self).__init__(**kwargs)
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivy\uix\widget.py", line 371, in __init__
+    widget.dispatch('on_kv_post', self)
+  File "kivy\\_event.pyx", line 731, in kivy._event.EventDispatcher.dispatch
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\main.py", line 369, in on_kv_post
+    self.load_carousel()
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\main.py", line 378, in load_carousel
+    unlocked = self.db.get_unlocked_candles()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\main.py", line 99, in get_unlocked_candles
+    c.execute('SELECT candle_id FROM inventory')
+sqlite3.OperationalError: no such column: candle_id

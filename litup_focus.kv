@@ -123,6 +123,39 @@
                         id: pause_btn_text
                         text: "Pause"
 
+<ShopCard>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: "220dp"
+    padding: "10dp"
+    spacing: "5dp"
+    style: "elevated"
+    radius: [20, 20, 20, 20]
+    
+    MDIcon:
+        icon: root.icon_source
+        font_size: "64sp"
+        pos_hint: {"center_x": .5}
+        theme_text_color: "Custom"
+        text_color: root.icon_color
+        size_hint_y: 0.5
+        
+    MDLabel:
+        text: root.candle_name
+        halign: "center"
+        font_style: "Title"
+        role: "medium"
+        theme_text_color: "Primary"
+        size_hint_y: None
+        height: "30dp"
+        
+    MDButton:
+        pos_hint: {"center_x": .5}
+        style: "filled"
+        on_release: root.shop_screen.buy_candle(root.candle_id, root.candle_price)
+        MDButtonText:
+            text: "Buy (" + str(root.candle_price) + ")"
+
 <WaxShopScreen>:
     MDBoxLayout:
         orientation: 'vertical'
@@ -134,19 +167,83 @@
                     on_release: root.manager.current = 'hearth'
             MDTopAppBarTitle:
                 text: "The Wax Shop"
-        
-        MDLabel:
-            id: balance_label
-            text: "Embers: 0"
-            font_style: "Title"
-            role: "medium"
-            halign: "center"
-            size_hint_y: None
-            height: "80dp"
+                
+        MDBoxLayout:
+            orientation: 'horizontal'
+            adaptive_height: True
+            padding: "20dp"
+            
+            MDLabel:
+                id: balance_label
+                text: "Embers: 0"
+                font_style: "Title"
+                role: "large"
+                
+            MDButton:
+                style: "tonal"
+                pos_hint: {"center_y": .5}
+                on_release: root.manager.current = 'forge'
+                MDButtonText:
+                    text: "Enter Forge (Cost: 5)"
         
         MDScrollView:
-            MDList:
-                id: shop_list
+            MDGridLayout:
+                id: shop_grid
+                cols: 2
+                adaptive_height: True
+                padding: ["20dp", "10dp", "20dp", "20dp"]
+                spacing: "15dp"
+
+<ForgeScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            type: "small"
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "arrow-left"
+                    on_release: root.manager.current = 'shop'
+            MDTopAppBarTitle:
+                text: "The Forge"
+                
+        MDLabel:
+            text: "Draw your custom candle outline!"
+            halign: "center"
+            font_style: "Title"
+            role: "medium"
+            size_hint_y: None
+            height: "50dp"
+            
+        MDLabel:
+            id: forge_bal
+            text: "Balance: 0 Embers"
+            halign: "center"
+            theme_text_color: "Secondary"
+            size_hint_y: None
+            height: "30dp"
+            
+        MDBoxLayout:
+            padding: "20dp"
+            DrawCanvas:
+                id: draw_area
+                
+        MDBoxLayout:
+            size_hint_y: None
+            height: "80dp"
+            padding: "20dp"
+            spacing: "20dp"
+            
+            MDButton:
+                style: "text"
+                on_release: draw_area.clear_canvas()
+                MDButtonText:
+                    text: "Clear"
+                    
+            MDButton:
+                style: "filled"
+                on_release: root.forge_candle()
+                MDButtonText:
+                    text: "Forge Candle"
 
 <GraveyardScreen>:
     MDBoxLayout:

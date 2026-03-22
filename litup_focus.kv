@@ -7,7 +7,6 @@
     padding: "8dp"
     spacing: "4dp"
     style: "elevated"
-    md_bg_color: [1, 1, 1, 1] 
     radius: [20, 20, 20, 20]
     on_release: app.select_candle(self.candle_id)
 
@@ -46,26 +45,17 @@
 <HearthScreen>:
     MDBoxLayout:
         orientation: 'vertical'
-        md_bg_color: [0.98, 0.96, 0.94, 1]
 
         MDTopAppBar:
             type: "small"
-            theme_bg_color: "Custom"
-            md_bg_color: [0.98, 0.96, 0.94, 1] # Match the app background
             MDTopAppBarTitle:
                 text: "The Hearth"
-                theme_text_color: "Custom"
-                text_color: [0.4, 0.2, 0.1, 1] # Warm dark brown
             MDTopAppBarTrailingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "cart-outline"
-                    theme_icon_color: "Custom"
-                    icon_color: [0.4, 0.2, 0.1, 1]
                     on_release: root.manager.current = 'shop'
                 MDActionTopAppBarButton:
                     icon: "history"
-                    theme_icon_color: "Custom"
-                    icon_color: [0.4, 0.2, 0.1, 1]
                     on_release: root.manager.current = 'graveyard'
         
         MDBoxLayout:
@@ -101,9 +91,11 @@
                 font_style: "Display"
                 role: "large"
                 theme_text_color: "Primary"
+                font_size: "64sp"
+                bold: True
                 halign: "center"
                 size_hint_y: None
-                height: "60dp"
+                height: "80dp"
 
             Candle:
                 id: candle_widget
@@ -134,21 +126,14 @@
 <WaxShopScreen>:
     MDBoxLayout:
         orientation: 'vertical'
-        md_bg_color: [0.98, 0.96, 0.94, 1]
         MDTopAppBar:
             type: "small"
-            theme_bg_color: "Custom"
-            md_bg_color: [0.98, 0.96, 0.94, 1]
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "arrow-left"
-                    theme_icon_color: "Custom"
-                    icon_color: [0.4, 0.2, 0.1, 1]
                     on_release: root.manager.current = 'hearth'
             MDTopAppBarTitle:
                 text: "The Wax Shop"
-                theme_text_color: "Custom"
-                text_color: [0.4, 0.2, 0.1, 1]
         
         MDLabel:
             id: balance_label
@@ -166,21 +151,14 @@
 <GraveyardScreen>:
     MDBoxLayout:
         orientation: 'vertical'
-        md_bg_color: [0.98, 0.96, 0.94, 1]
         MDTopAppBar:
             type: "small"
-            theme_bg_color: "Custom"
-            md_bg_color: [0.98, 0.96, 0.94, 1]
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "arrow-left"
-                    theme_icon_color: "Custom"
-                    icon_color: [0.4, 0.2, 0.1, 1]
                     on_release: root.manager.current = 'hearth'
             MDTopAppBarTitle:
                 text: "The Graveyard"
-                theme_text_color: "Custom"
-                text_color: [0.4, 0.2, 0.1, 1]
                 
         MDScrollView:
             MDList:

@@ -1,7 +1,7 @@
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.clock import Clock
-from kivy.graphics import Color, Rectangle, Ellipse, Triangle
+from kivy.graphics import Color, Rectangle, Ellipse, Triangle, Quad
 from kivy.properties import NumericProperty, BooleanProperty, StringProperty, ListProperty
 from kivy.uix.widget import Widget
 from kivymd.uix.card import MDCard
@@ -21,7 +21,7 @@ CANDLES = {
 }
 
 class Database:
-    def __init__(self, db_path='ember_ink.db'):
+    def __init__(self, db_path='litup_focus.db'):
         self.db_path = db_path
         self.init_db()
 
@@ -112,41 +112,126 @@ class Candle(Widget):
         
         data = CANDLES.get(self.candle_type, CANDLES['test'])
         c_color = data['color']
+        
+        # Calculate specialized colors
+        r, g, b, a = float(c_color[0]), float(c_color[1]), float(c_color[2]), float(c_color[3])
+        dark_color = [max(0.0, r-0.2), max(0.0, g-0.2), max(0.0, b-0.2), 1.0]
+        light_color = [min(1.0, r+0.2), min(1.0, g+0.2), min(1.0, b+0.2), 1.0]
 
         with self.canvas:
-            Color(0.85, 0.8, 0.75, 1)
-            Ellipse(pos=(cx - w*0.7, base_y - 15), size=(w*1.4, 30))
+            # Base plate/Shadow
+            Color(0.05, 0.05, 0.05, 0.8)
+            Ellipse(pos=(cx - w*0.8, base_y - 20), size=(w*1.6, 40))
+            
+            # Bronze/Wooden Holder
+            Color(0.3, 0.2, 0.1, 1)
+            Rectangle(pos=(cx - w*0.6, base_y - 15), size=(w*1.2, 10))
+            Ellipse(pos=(cx - w*0.6, base_y - 20), size=(w*1.2, 10))
 
-            Color(*c_color)
             if self.candle_type in ['test', 'pillar']:
+                # Pillar Candle
+                # Bottom curve
+                Color(*dark_color)
+                Ellipse(pos=(cx - w/2, base_y - 10), size=(w, 20))
+                
+                # Main body
+                Color(*c_color)
                 Rectangle(pos=(cx - w/2, base_y), size=(w, current_h))
-                flame_y = base_y + current_h
+                
+                # Top pool
+                Color(*light_color)
+                Ellipse(pos=(cx - w/2, base_y + current_h - 10), size=(w, 20))
+                
+                # Wax drip
+                if self.melt_progress < 0.95 and self.melt_progress > 0:
+                    Color(*c_color)
+                    Ellipse(pos=(cx - w*0.45, base_y + current_h - 30), size=(10, 30))
+                    Ellipse(pos=(cx - w*0.45, base_y + current_h - 40), size=(10, 10))
+
+                    Ellipse(pos=(cx + w*0.35, base_y + current_h - 20), size=(8, 20))
+                    Ellipse(pos=(cx + w*0.35, base_y + current_h - 26), size=(8, 8))
+
+                flame_y = base_y + current_h + 5
+
             elif self.candle_type == 'pyramid':
                 w_base = 120
-                Triangle(points=[cx - w_base/2, base_y, cx + w_base/2, base_y, cx, base_y + current_h])
-                flame_y = base_y + current_h
+                w_top = w_base * (1 - self.melt_progress) + 10 # Never perfectly sharp
+                
+                Color(*dark_color)
+                Ellipse(pos=(cx - w_base/2, base_y - 10), size=(w_base, 20))
+                
+                Color(*c_color)
+                Quad(points=(cx - w_base/2, base_y, 
+                             cx + w_base/2, base_y, 
+                             cx + w_top/2, base_y + current_h, 
+                             cx - w_top/2, base_y + current_h))
+                
+                Color(*light_color)
+                Ellipse(pos=(cx - w_top/2, base_y + current_h - 5), size=(w_top, 10))
+                flame_y = base_y + current_h + 5
+
             elif self.candle_type == 'orb':
                 w_orb = 120
-                Ellipse(pos=(cx - w_orb/2, base_y), size=(w_orb, 120 * self.melt_progress))
-                flame_y = base_y + (120 * self.melt_progress)
+                h_orb = 120 * self.melt_progress
+                w_current = w_orb * self.melt_progress
+                
+                Color(*dark_color)
+                Ellipse(pos=(cx - w_current/2, base_y - 5), size=(w_current, 10))
+                
+                Color(*c_color)
+                Ellipse(pos=(cx - w_current/2, base_y), size=(w_current, h_orb))
+                
+                Color(*light_color)
+                Ellipse(pos=(cx - w_current/2, base_y + h_orb - 8), size=(w_current, 16))
+                flame_y = base_y + h_orb + 5
+
             elif self.candle_type == 'block':
                 w_block = 140
+                Color(*dark_color)
                 Rectangle(pos=(cx - w_block/2, base_y), size=(w_block, max_h * 0.7 * self.melt_progress))
-                flame_y = base_y + (max_h * 0.7 * self.melt_progress)
+                Color(*c_color)
+                Rectangle(pos=(cx - w_block/2 + 5, base_y + 5), size=(w_block - 10, max_h * 0.7 * self.melt_progress - 5))
+                Color(*light_color)
+                Quad(points=(cx - w_block/2, base_y + max_h * 0.7 * self.melt_progress,
+                             cx + w_block/2, base_y + max_h * 0.7 * self.melt_progress,
+                             cx + w_block/2 - 10, base_y + max_h * 0.7 * self.melt_progress + 15,
+                             cx - w_block/2 + 10, base_y + max_h * 0.7 * self.melt_progress + 15))
+                flame_y = base_y + (max_h * 0.7 * self.melt_progress) + 10
 
+            # Draw Wick
+            if self.melt_progress > 0:
+                Color(0.1, 0.1, 0.1, 1)
+                Rectangle(pos=(cx - 2, flame_y - 12), size=(4, 15))
+                if not self.flame_active:
+                    Color(0.5, 0.1, 0.1, 1) # Red glowing wick bit
+                    Ellipse(pos=(cx - 2.5, flame_y - 2), size=(5, 5))
+                
+            # Draw multi-layered complex Flame
             if self.flame_active and self.melt_progress > 0:
-                pulse = 0.8 + 0.2 * math.sin(self.time_elapsed * 12)
+                t = self.time_elapsed
+                # Complex noise to simulate real flicker
+                flicker = 0.8 + 0.1 * math.sin(t * 15) + 0.05 * math.sin(t * 27) + 0.05 * math.sin(t * 7)
+                wind_x = 3 * math.sin(t * 10) + 1 * math.sin(t * 31)
                 
-                Color(1, 0.8, 0.2, 0.2 * pulse) 
-                glow_r = 80 * pulse
-                Ellipse(pos=(cx - glow_r/2, flame_y - glow_r*0.3), size=(glow_r, glow_r))
+                # Outer Halo Glow
+                Color(1, 0.6, 0.1, 0.15 * flicker) 
+                glow_r = 140 * flicker
+                Ellipse(pos=(cx + wind_x - glow_r/2, flame_y - glow_r*0.2), size=(glow_r, glow_r))
                 
-                Color(1, 0.6, 0.1, 0.9)
-                flame_w, flame_h = 24 * pulse, 36 * pulse
-                Ellipse(pos=(cx - flame_w/2, flame_y), size=(flame_w, flame_h))
+                # Middle Orange Flame
+                Color(1, 0.4, 0.0, 0.8)
+                flame_w, flame_h = 28 * flicker, 45 * flicker
+                Ellipse(pos=(cx + wind_x*0.6 - flame_w/2, flame_y - 5), size=(flame_w, flame_h))
                 
-                Color(1, 1, 0.8, 1)
-                Ellipse(pos=(cx - flame_w*0.3, flame_y + flame_h*0.1), size=(flame_w*0.6, flame_h*0.5))
+                # Inner Yellow Flame
+                Color(1, 0.9, 0.2, 0.9)
+                in_w, in_h = flame_w * 0.6, flame_h * 0.6
+                Ellipse(pos=(cx + wind_x*0.3 - in_w/2, flame_y + flame_h*0.1), size=(in_w, in_h))
+                
+                # Core White Flame
+                Color(1, 1, 1, 1)
+                core_w, core_h = in_w * 0.4, in_h * 0.4
+                Ellipse(pos=(cx - core_w/2, flame_y + flame_h*0.15), size=(core_w, core_h))
 
 class HearthScreen(Screen):
     selected_candle = StringProperty('test')
@@ -286,10 +371,10 @@ class GraveyardScreen(Screen):
             )
             self.ids.sessions_list.add_widget(item)
 
-class EmberInkApp(MDApp):
+class LitUpFocusApp(MDApp):
     def build(self):
-        Builder.load_file('ember_ink.kv')
-        self.theme_cls.theme_style = "Light" 
+        Builder.load_file('litup_focus.kv')
+        self.theme_cls.theme_style = "Dark" 
         self.theme_cls.primary_palette = "Orange" 
         
         self.sm = ScreenManager()
@@ -303,4 +388,4 @@ class EmberInkApp(MDApp):
         hearth.update_selected_candle(c_id)
 
 if __name__ == '__main__':
-    EmberInkApp().run()
+    LitUpFocusApp().run()

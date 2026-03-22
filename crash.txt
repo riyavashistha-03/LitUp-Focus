@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\run_kivy.py", line 6, in <module>
+    LitUpFocusApp().run()
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivy\app.py", line 955, in run
+    self._run_prepare()
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivymd\app.py", line 159, in _run_prepare
+    super()._run_prepare()
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivy\app.py", line 925, in _run_prepare
+    root = self.build()
+           ^^^^^^^^^^^^
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\main.py", line 378, in build
+    self.theme_cls.primary_palette = "Amber"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "kivy\\properties.pyx", line 520, in kivy.properties.Property.__set__
+  File "kivy\\properties.pyx", line 567, in kivy.properties.Property.set
+  File "kivy\\properties.pyx", line 606, in kivy.properties.Property._dispatch
+  File "kivy\\_event.pyx", line 1307, in kivy._event.EventObservers.dispatch
+  File "kivy\\_event.pyx", line 1213, in kivy._event.EventObservers._dispatch
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivymd\theming.py", line 793, in set_colors
+    self._set_palette_color()
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivymd\theming.py", line 889, in _set_palette_color
+    self._set_application_scheme(self.primary_palette)
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\kivymd\theming.py", line 864, in _set_application_scheme
+    color = Hct.from_int(argb_from_rgba_01(self.color_to_rgba(color)))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\materialyoucolor\utils\color_utils.py", line 151, in argb_from_rgba_01
+    return argb_from_rgba([int(_ * 255) for _ in rgba])
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rahul Dev\OneDrive\Desktop\LitUp-Focus\.venv\Lib\site-packages\materialyoucolor\utils\color_utils.py", line 151, in <listcomp>
+    return argb_from_rgba([int(_ * 255) for _ in rgba])
+                           ^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
